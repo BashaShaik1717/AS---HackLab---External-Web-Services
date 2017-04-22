@@ -1,0 +1,16 @@
+try {
+	var r = new sn_ws.RESTMessageV2('HackLabs - Pizza Locator', 'Default GET');
+	var address = current.caller_id.location.street + ' ' + current.caller_id.location.city + ' ' +current.caller_id.location.state + ' ' + current.caller_id.location.zip;
+	r.setStringParameter('address', address);
+	var response = r.execute();
+	var responseBody = response.getBody();
+	var httpStatus = response.getStatusCode();
+	var jp = new JSONParser();
+	var responseObj = jp.parse(responseBody);
+	var pizza_location = responseObj.Stores[0];
+	gs.addInfoMessage("To order pizza, please call Store#"+pizza_location.StoreID+" at "+pizza_location.Phone);
+	current.update();
+	action.setRedirectURL(current);
+} catch (ex) {
+    var message = ex.getMessage();
+}
